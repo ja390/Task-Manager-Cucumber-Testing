@@ -2,8 +2,6 @@ package com.example.taskmanager.steps;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.repo.TaskRepository;
@@ -15,24 +13,10 @@ import io.cucumber.java.en.When;
 
 public class TaskSteps {
 
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
     @Autowired
     private TaskRepository taskRepository;
 
-    private String baseUrl;
     private Task testTask;
-
-    @Given("the application is running")
-    public void theApplicationIsRunning() {
-        baseUrl = "http://localhost:" + port;
-        assertThat(restTemplate.getForEntity(baseUrl, String.class).getStatusCode().is2xxSuccessful())
-            .isTrue();
-    }
 
     @Given("I have a task with title {string} and description {string}")
     public void iHaveATaskWithTitleAndDescription(String title, String description) {

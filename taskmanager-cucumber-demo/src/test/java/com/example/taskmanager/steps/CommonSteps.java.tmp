@@ -1,0 +1,15 @@
+package com.example.taskmanager.steps;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import io.cucumber.java.en.Given;
+
+public class CommonSteps {
+    @LocalServerPort
+    private int port;
+
+    @Given("the application is running")
+    public void theApplicationIsRunning() {
+        assertThat(port).isGreaterThan(0);
+    }
+}

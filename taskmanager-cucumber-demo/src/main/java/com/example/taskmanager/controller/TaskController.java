@@ -28,7 +28,8 @@ public class TaskController {
     public String listTasks(Model model) {
         List<Task> tasks = repo.findAll();
         model.addAttribute("tasks", tasks);
-        return "index";
+        model.addAttribute("message", "Successfully signed in");
+        return "signin-success";
     }
 
     @GetMapping("/new")

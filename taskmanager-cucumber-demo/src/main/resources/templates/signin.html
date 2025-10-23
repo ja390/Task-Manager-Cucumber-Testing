@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign In</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .password-requirements li {
+            color: #dc3545;
+        }
+        .password-requirements li.valid {
+            color: #198754;
+        }
+        .password-toggle {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Sign In</h2>
+                        
+                        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                        <form action="#" th:action="@{/signin}" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" 
+                                       class="form-control" 
+                                       th:class="${emailError != null || error != null ? 'form-control is-invalid' : 'form-control'}"
+                                       id="email" 
+                                       name="email" 
+                                       th:value="${email}"
+                                       required
+                                       pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                                       title="Please enter a valid email address">
+                                <div class="invalid-feedback" th:text="${emailError ?: 'Please enter a valid email address'}">
+                                    Please enter a valid email address
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" 
+                                           class="form-control" 
+                                           th:class="${passwordError != null || error != null ? 'form-control is-invalid' : 'form-control'}"
+                                           id="password" 
+                                           name="password" 
+                                           required
+                                           minlength="6"
+                                           title="Password must be at least 6 characters long">
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <div class="invalid-feedback" th:text="${passwordError ?: 'Password must be at least 6 characters long'}">
+                                        Password must be at least 6 characters long
+                                    </div>
+                                </div>
+                                <div class="form-text mt-2">
+                                    Password requirements:
+                                    <ul class="mb-0 ps-3">
+                                        <li id="lengthCheck">At least 6 characters long</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Sign In</button>
+                            </div>
+                        </form>
+                        
+                        <div class="text-center mt-3">
+                            <p>Don't have an account? <a th:href="@{/signup}">Sign Up</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enable Bootstrap form validation
+        (function () {
+            'use strict'
+
+            // Fetch all forms that need validation
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+        // Password validation and real-time feedback
+        const password = document.getElementById('password');
+        const lengthCheck = document.getElementById('lengthCheck');
+        
+        password.addEventListener('input', function() {
+            // Check length
+            if (this.value.length >= 6) {
+                lengthCheck.classList.add('valid');
+                this.setCustomValidity('');
+            } else {
+                lengthCheck.classList.remove('valid');
+                this.setCustomValidity('Password must be at least 6 characters long');
+            }
+        });
+
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Toggle eye icon
+            const icon = this.querySelector('i');
+            icon.classList.toggle('bi-eye');
+            icon.classList.toggle('bi-eye-slash');
+        });
+
+        // Custom email validation
+        const email = document.getElementById('email');
+        email.addEventListener('input', function() {
+            if (this.validity.typeMismatch) {
+                this.setCustomValidity('Please enter a valid email address');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+</body>
+</html>
